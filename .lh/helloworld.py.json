@@ -1,0 +1,18 @@
+{
+    "sourceFile": "helloworld.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1717383901578,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1717383901578,
+            "name": "Commit-0",
+            "content": "from flask import Flask\nfrom flask_restful import Api, Resource\n\napp = Flask(__name__)\n\n# wrap app in a RESTful API\napi = Api(app)\n\nnames = {\n    \"Anurag\": {\"age\": 18, \"gender\": \"male\"},\n    \"Batman\": {\"age\": 43, \"gender\": \"male\"},\n}\n\n\n# inherit Resource to handle GET, PUT, etc.\nclass HelloWorld(Resource):\n    def get(self, name):\n        return names[name]\n\n    def post(self):\n        return {\"data\": \"Posted\"}\n\n\n# string name parameter to be passed in after helloworld\napi.add_resource(HelloWorld, \"/helloworld/<string:name>\")\n\nif __name__ == \"__main__\":\n    app.run(debug=True)\n"
+        }
+    ]
+}
