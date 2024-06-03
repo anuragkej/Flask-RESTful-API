@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 6,
+            "activePatchIndex": 17,
             "patches": [
                 {
                     "date": 1717381138190,
@@ -32,6 +32,50 @@
                 {
                     "date": 1717381813729,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n \n #inherit Resource to handle GET, PUT, etc.\n class HelloWorld(Resource):\n     def get(self):\n-        return {\"data\":\"Hello World\"}\n+        return {\"data\": \"Hello World\"}\n     \n api.add_resource(HelloWorld, \"/helloworld\")\n \n if __name__ == \"__main__\":\n"
+                },
+                {
+                    "date": 1717381924081,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,20 @@\n+from flask import Flask\n+from flask_restful import Api, Resource\n+\n+app = Flask(__name__)\n+\n+#wrap app in a RESTful API\n+api = Api(app)\n+\n+#inherit Resource to handle GET, PUT, etc.\n+class HelloWorld(Resource):\n+    def get(self):\n+        return {\"data\": \"Hello World\"}\n+    def post(self):\n+        return {\"data\": \"Posted\"}\n+    \n+api.add_resource(HelloWorld, \"/helloworld\")\n+\n+if __name__ == \"__main__\":\n+    app.run(debug=True)\n+    \n"
+                },
+                {
+                    "date": 1717382047653,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,31 +8,14 @@\n \n #inherit Resource to handle GET, PUT, etc.\n class HelloWorld(Resource):\n     def get(self):\n-        return {\"data\": \"Hello World\"}\n+        return {\"data\": name}\n     def post(self):\n         return {\"data\": \"Posted\"}\n     \n-api.add_resource(HelloWorld, \"/helloworld\")\n+#string name parameter to be passed in after helloworld\n+api.add_resource(HelloWorld, \"/helloworld/<string:name>/<int:test>\")\n \n if __name__ == \"__main__\":\n     app.run(debug=True)\n     \n-from flask import Flask\n-from flask_restful import Api, Resource\n-\n-app = Flask(__name__)\n-\n-#wrap app in a RESTful API\n-api = Api(app)\n-\n-#inherit Resource to handle GET, PUT, etc.\n-class HelloWorld(Resource):\n-    def get(self):\n-        return {\"data\": \"Hello World\"}\n-    \n-api.add_resource(HelloWorld, \"/helloworld\")\n-\n-if __name__ == \"__main__\":\n-    app.run(debug=True)\n-    \n"
+                },
+                {
+                    "date": 1717382079420,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n \n #inherit Resource to handle GET, PUT, etc.\n class HelloWorld(Resource):\n     def get(self):\n-        return {\"data\": name}\n+        return {\"name\": name, \"test\": test}\n     def post(self):\n         return {\"data\": \"Posted\"}\n     \n #string name parameter to be passed in after helloworld\n"
+                },
+                {
+                    "date": 1717382494819,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n api = Api(app)\n \n #inherit Resource to handle GET, PUT, etc.\n class HelloWorld(Resource):\n-    def get(self):\n+    def get(self, name, test):\n         return {\"name\": name, \"test\": test}\n     def post(self):\n         return {\"data\": \"Posted\"}\n     \n"
+                },
+                {
+                    "date": 1717382528706,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,17 +5,19 @@\n \n #wrap app in a RESTful API\n api = Api(app)\n \n+names = {}\n+\n #inherit Resource to handle GET, PUT, etc.\n class HelloWorld(Resource):\n     def get(self, name, test):\n         return {\"name\": name, \"test\": test}\n     def post(self):\n         return {\"data\": \"Posted\"}\n     \n #string name parameter to be passed in after helloworld\n-api.add_resource(HelloWorld, \"/helloworld/<string:name>/<int:test>\")\n+api.add_resource(HelloWorld, \"/helloworld/<string:name>\")\n \n if __name__ == \"__main__\":\n     app.run(debug=True)\n     \n"
+                },
+                {
+                    "date": 1717382587383,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n \n #wrap app in a RESTful API\n api = Api(app)\n \n-names = {}\n+names = {\"Anurag\": {\"age\": 18, \"gender\": male}, \"batman\": {\"age\": 43, \"gender\": male}}\n \n #inherit Resource to handle GET, PUT, etc.\n class HelloWorld(Resource):\n     def get(self, name, test):\n"
+                },
+                {
+                    "date": 1717382735245,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,22 +2,24 @@\n from flask_restful import Api, Resource\n \n app = Flask(__name__)\n \n-#wrap app in a RESTful API\n+# wrap app in a RESTful API\n api = Api(app)\n \n names = {\"Anurag\": {\"age\": 18, \"gender\": male}, \"batman\": {\"age\": 43, \"gender\": male}}\n \n-#inherit Resource to handle GET, PUT, etc.\n+\n+# inherit Resource to handle GET, PUT, etc.\n class HelloWorld(Resource):\n     def get(self, name, test):\n         return {\"name\": name, \"test\": test}\n+\n     def post(self):\n         return {\"data\": \"Posted\"}\n-    \n-#string name parameter to be passed in after helloworld\n+\n+\n+# string name parameter to be passed in after helloworld\n api.add_resource(HelloWorld, \"/helloworld/<string:name>\")\n \n if __name__ == \"__main__\":\n     app.run(debug=True)\n-    \n"
+                },
+                {
+                    "date": 1717382757630,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,10 +10,10 @@\n \n \n # inherit Resource to handle GET, PUT, etc.\n class HelloWorld(Resource):\n-    def get(self, name, test):\n-        return {\"name\": name, \"test\": test}\n+    def get(self, name):\n+        return names[name]\n \n     def post(self):\n         return {\"data\": \"Posted\"}\n \n"
+                },
+                {
+                    "date": 1717382784260,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n \n # wrap app in a RESTful API\n api = Api(app)\n \n-names = {\"Anurag\": {\"age\": 18, \"gender\": male}, \"batman\": {\"age\": 43, \"gender\": male}}\n+names = {\"Anurag\": {\"age\": 18, \"gender\": \"male\"}, \"batman\": {\"age\": 43, \"gender\": \"male\"}}\n \n \n # inherit Resource to handle GET, PUT, etc.\n class HelloWorld(Resource):\n"
+                },
+                {
+                    "date": 1717382807983,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n api = Api(app)\n \n names = {\n     \"Anurag\": {\"age\": 18, \"gender\": \"male\"},\n-    \"batman\": {\"age\": 43, \"gender\": \"male\"},\n+    \"Batman\": {\"age\": 43, \"gender\": \"male\"},\n }\n \n \n # inherit Resource to handle GET, PUT, etc.\n"
+                },
+                {
+                    "date": 1717382817548,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n api = Api(app)\n \n names = {\n     \"Anurag\": {\"age\": 18, \"gender\": \"male\"},\n-    \"Batman\": {\"age\": 43, \"gender\": \"male\"},\n+    \"Batman\": {\"age\": 43, \"gender\": \"male\"}\n }\n \n \n # inherit Resource to handle GET, PUT, etc.\n"
                 }
             ],
             "date": 1717381138190,
