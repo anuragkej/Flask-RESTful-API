@@ -12,6 +12,9 @@ for i in range(len(data)):
     response = requests.put(BASE_URL + "video/" + str(i), data[i])
     print(response.json())
 
+response = requests.put(
+    BASE_URL + "video/83", {"name": "hi hello", "views": 92, "likes": 34}
+)
 input()
-response = requests.get(BASE_URL + "video/2")
+response = requests.patch(BASE_URL + "video/2", {"views": 99, "likes": 101})
 print(response.json())

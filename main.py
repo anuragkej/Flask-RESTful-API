@@ -39,6 +39,10 @@ video_put_args.add_argument(
     "likes", type=int, help="Likes of the video is required", required=True
 )
 
+video_update_args = reqparse.RequestParser()
+video_update_args.add_argument("name", type=str, help="Name of the video is required")
+video_update_args.add_argument("views", type=int, help="Views of the video is required")
+video_update_args.add_argument("likes", type=int, help="Likes of the video is required")
 
 # def abort_id_DNE(video_id):
 #     if video_id not in videos:
@@ -64,6 +68,9 @@ class Video(Resource):
         # abort_id_DNE(video_id)
 
         result = VideoModel.query.filter_by(id=video_id).first()
+        # error handling for video ID
+        if not result:
+            abort(404, message="Can not find video with that ID.")
         return result
 
     # create new video
@@ -85,6 +92,25 @@ class Video(Resource):
         # permanently put to database
         db.session.commit()
         return video, 201  # 'created' status code
+
+    # update
+    @marshal_with(resource_fields)
+    def patch(self, video_id):
+        args = video_update_args.parse_args()
+        result = VideoModel.query.filter_by(id=video_id).first()
+        if not result:
+            abort(404, message="Video doesn't exist, cannot update")
+
+        # update process
+        if args["name"]:
+            result.name = args["name"]
+        if args["views"]:
+            result.views = args["views"]
+        if args["likes"]:
+            result.likes = args["likes"]
+
+        db.session.commit()
+        return result
 
     def delete(self, video_id):
         abort_id_DNE(video_id)
